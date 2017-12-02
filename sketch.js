@@ -2,6 +2,8 @@ var x = 0;
 var y = 0;
 var myCanvasWidth = 800;
 var myCanvasHeight = 800;
+var t = 0;
+var radius = 100;
 
 function setup() {
   noFill();
@@ -10,13 +12,27 @@ function setup() {
 }
 
 function makeBackground() {
-  background(50, 100, 50);
+  background(0, 200, 0)
+}
+
+function fade() {
+  fill(255, 100, 50, 20)
+  rect(0, 0, 800, 800)
+}
+
+function success() {
+  clear();
+  fill(0, 200, 0)
+  rect(0, 0, 800, 800)
 }
 
 function draw() {
   noFill();
   ellipse(x, y, 20, 20);
-  x = x + 5;
+  fade()
+  t += 0.1;
+  x = 400 + Math.cos(t) * radius;
+  y = 400 + Math.sin(t) * radius;
 
   var weAreAtTheRightSideOfTheScreen = x > myCanvasWidth;
   if (weAreAtTheRightSideOfTheScreen) {
@@ -29,19 +45,24 @@ function draw() {
   }
 }
 
+function getDistance(startX, startY, endX, endY) {
+  const dx = endX - startX;
+  const dy = endY- startY;
+  return Math.sqrt(dx*dx + dy*dy);
+}
 
 function mousePressed() {
-  clear();
-  makeBackground();
+  // clear();
+  // makeBackground();
   fill(0, 0, 200);
   ellipse(mouseX, mouseY, 40, 40);
 
-  // var isNearX = (mouseX > (x - 20)) && (mouseX < (x + 20));
-  // var isNearY = (mouseY > (y - 20)) && (mouseY < (y + 20));
+  const distance = getDistance(mouseX, mouseY, x, y);
 
-  // if (isNearX && isNearY) {
-  //   textSize(32);
-  //   fill(200, 0, 0);
-  //   text("success! ", 20, 200);
-  // }
+  if (distance < 20) {
+    textSize(32);
+    fill(200, 0, 0);
+    text("success! ", 20, 200);
+    success();
+  }
 }
