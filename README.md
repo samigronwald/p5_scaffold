@@ -565,7 +565,7 @@ function mousePressed() {
 }
 ```
 
-### Detecting if I clicked the circle snake thing
+### Detecting if we clicked the circle snake thing
 Here is our requirement:
 Is the `mouseX` and `mouseY` coordinate of my mouse within `20` pixels of the origin of the latest known `x` and `y` coordinates?
 
@@ -585,42 +585,87 @@ var topBoundaryY = y + 20;
 var isNearY = ( mouseY > bottomBoundaryY ) && ( mouseY < topBoundaryY );
 ```
 
+### Determining if we should show the "success" message
+Our requirement:
+If it is near the x origin and near the y origin print out the text
+
+```js
+if(isNearX && isNearY) {
+  textSize(32);
+  fill(200, 0, 0);
+  text("success! ", 20, 200);
+}
+```
+
+We need to establish a text size and color before we call `text`
+
+And that is it!
+
+Here is our super duper mvp!
+
 # Finished Game!
 ```js
 var x = 0;
 var y = 0;
+var myCanvasWidth = 800;
+var myCanvasHeight = 800;
 
 function setup() {
   noFill();
-  createCanvas(800, 800);
-  background(100, 200, 100);
+  createCanvas(myCanvasWidth, myCanvasHeight);
+  makeBackground();
+}
+
+function makeBackground() {
+  background(50, 100, 50);
 }
 
 function draw() {
   noFill();
   ellipse(x, y, 20, 20);
   x = x + 5;
-  if (x > 800) {
+
+  var weAreAtTheRightSideOfTheScreen = x > myCanvasWidth;
+  if (weAreAtTheRightSideOfTheScreen) {
     y = y + 100;
     x = 0;
   }
 
-  if (y > 800) {
-    y = 0;
-    x = 0;
+  if ( y > myCanvasHeight ) {
+    noLoop();
   }
 }
 
+
 function mousePressed() {
   clear();
-  background(100, 200, 100);
+  makeBackground();
+  fill(0, 0, 200);
+  ellipse(mouseX, mouseY, 40, 40);
   textSize(32);
   fill(0, 102, 153);
 
-  var isNearX = (mouseX > (x - 20)) && (mouseX < (x + 20));
-  var isNearY = (mouseY > (y - 20)) && (mouseY < (y + 20));
+  var bottomBoundaryX = x - 20;
+  var topBoundaryX = x + 20;
+  var isNearX = ( mouseX > bottomBoundaryX ) && ( mouseX < topBoundaryX );
+
+  var bottomBoundaryY = y - 20;
+  var topBoundaryY = y + 20;
+  var isNearY = ( mouseY > bottomBoundaryY ) && ( mouseY < topBoundaryY );
+
   if (isNearX && isNearY) {
+    textSize(32);
+    fill(200, 0, 0);
     text("success! ", 20, 200);
   }
 }
 ```
+
+# Additional Features
+- Make the snake go in a circle
+  - oscillate the radius
+  - increase / decrease the speed
+- keep a score
+- Make the snake go in a random direction
+- track longest combo
+- increase the difficulty
