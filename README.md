@@ -566,10 +566,24 @@ function mousePressed() {
 ```
 
 ### Detecting if I clicked the circle snake thing
-So here is our requirement:
-Is the `X` and `Y` coordinate of my mouse within `20` pixels of the origin of
-the latest known
+Here is our requirement:
+Is the `mouseX` and `mouseY` coordinate of my mouse within `20` pixels of the origin of the latest known `x` and `y` coordinates?
 
+It is much easier to think about this problem in terms of our two directions, X
+and Y:
+- is `mouseX` within 40 of `x`
+- is `mouseY` within 40 of `y`
+
+In code this might look like this:
+```js
+var bottomBoundaryX = x - 20;
+var topBoundaryX = x + 20;
+var isNearX = ( mouseX > bottomBoundaryX ) && ( mouseX < topBoundaryX );
+
+var bottomBoundaryY = y - 20;
+var topBoundaryY = y + 20;
+var isNearY = ( mouseY > bottomBoundaryY ) && ( mouseY < topBoundaryY );
+```
 
 # Finished Game!
 ```js

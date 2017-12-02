@@ -35,13 +35,20 @@ function mousePressed() {
   makeBackground();
   fill(0, 0, 200);
   ellipse(mouseX, mouseY, 40, 40);
+  textSize(32);
+  fill(0, 102, 153);
 
-  // var isNearX = (mouseX > (x - 20)) && (mouseX < (x + 20));
-  // var isNearY = (mouseY > (y - 20)) && (mouseY < (y + 20));
+  var bottomBoundaryX = x - 20;
+  var topBoundaryX = x + 20;
+  var isNearX = ( mouseX > bottomBoundaryX ) && ( mouseX < topBoundaryX );
 
-  // if (isNearX && isNearY) {
-  //   textSize(32);
-  //   fill(200, 0, 0);
-  //   text("success! ", 20, 200);
-  // }
+  var bottomBoundaryY = y - 20;
+  var topBoundaryY = y + 20;
+  var isNearY = ( mouseY > bottomBoundaryY ) && ( mouseY < topBoundaryY );
+
+  if (isNearX && isNearY) {
+    textSize(32);
+    fill(200, 0, 0);
+    text("success! ", 20, 200);
+  }
 }
