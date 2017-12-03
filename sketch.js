@@ -1,48 +1,58 @@
+var time = 0;
 var x = 0;
 var y = 0;
-var myCanvasWidth = 800;
-var myCanvasHeight = 800;
-var t = 0;
-var radius = 100;
+var speed = 3;
+var scene = {
+  width: 800,
+  height: 800,
+  center: {
+    x: 400,
+    y: 400,
+  }
+};
+var ring = {
+  radius: 200,
+  pulse: {
+    radius: 20,
+    speed: 10,
+  }
+};
+var crosshair = {
+  radius: 50,
+};
 
 function setup() {
   noFill();
-  createCanvas(myCanvasWidth, myCanvasHeight);
-  makeBackground();
-}
-
-function makeBackground() {
+  createCanvas(scene.width, scene.height);
   background(0, 200, 0)
 }
 
 function fade() {
   fill(255, 100, 50, 20)
-  rect(0, 0, 800, 800)
+  rect(0, 0, scene.width, scene.width)
 }
 
 function success() {
   clear();
   fill(0, 200, 0)
-  rect(0, 0, 800, 800)
+  rect(0, 0, scene.width, scene.width)
+}
+function updatePosition() {
+  var radiusDelta = Math.cos(time * ring.pulse.speed) * ring.pulse.radius;
+  var radius = ring.radius + radiusDelta;
+  x = scene.center.x + Math.cos(time) * radius;
+  y = scene.center.y + Math.sin(time) * radius;
 }
 
 function draw() {
   noFill();
-  ellipse(x, y, 20, 20);
+  ellipse(x, y, crosshair.radius, crosshair.radius);
   fade()
-  t += 0.1;
-  x = 400 + Math.cos(t) * radius;
-  y = 400 + Math.sin(t) * radius;
-
-  var weAreAtTheRightSideOfTheScreen = x > myCanvasWidth;
-  if (weAreAtTheRightSideOfTheScreen) {
-    y = y + 100;
-    x = 0;
-  }
-
-  if ( y > myCanvasHeight ) {
-    noLoop();
-  }
+  updatePosition();
+  tick();
+}
+function tick() {
+  time += .01 * speed;
 }
 
 function getDistance(startX, startY, endX, endY) {
@@ -51,18 +61,13 @@ function getDistance(startX, startY, endX, endY) {
   return Math.sqrt(dx*dx + dy*dy);
 }
 
+
 function mousePressed() {
-  // clear();
-  // makeBackground();
-  fill(0, 0, 200);
-  ellipse(mouseX, mouseY, 40, 40);
+  ellipse(mouseX, mouseY, crosshair.radius, crosshair.radius);
 
   const distance = getDistance(mouseX, mouseY, x, y);
 
-  if (distance < 20) {
-    textSize(32);
-    fill(200, 0, 0);
-    text("success! ", 20, 200);
+  if (distance < crosshair.radius) {
     success();
   }
 }
