@@ -8,6 +8,8 @@ function getCirclePoint(radius, angle) {
 
 
 function getDistance(start, end) {
+  console.log('s', start);
+  console.log('e', end);
   const delta = sub(end, start);
   return Math.sqrt((delta.x * delta.x) + (delta.y * delta.y));
 }
