@@ -3,7 +3,7 @@ var crosshair = { radius: 50 };
 var trail = {
   head: { x: 0, y: 0 },
   nodes: [],
-  maxLength: 64,
+  maxLength: 1564,
 }
 var speed = 2;
 var scene = {
@@ -21,11 +21,14 @@ var ring = {
 
 function setup() {
   createCanvas(scene.width, scene.height);
+  p5.disableFriendlyErrors = true;
+
 }
 
 function draw() {
   updatePosition();
   fade()
+  drawFps()
   drawTrail()
   tick();
 }
@@ -36,17 +39,22 @@ function normalize(min, max, count) {
   return num => Math.min(Math.max(range * num, min), max)
 }
 
-function norm() {
-
+function drawFps() {
+  var fps = frameRate();
+  fill(255);
+  stroke(0);
+  text("FPS: " + fps.toFixed(2), 10, height - 10);
 }
 
 function drawTrail() {
   noFill();
-  const normRed = normalize(50, 255, trail.nodes.length);
+  const normColor = normalize(0, 255, trail.nodes.length);
   const normRadius = normalize(0, crosshair.radius, trail.nodes.length);
   trail.nodes.map((node, i) => {
-    const red = normRed(i);
-    stroke(255 - red, 0, 0);
+    const red = 255-normColor(i)/8;
+    const green = 155 - normColor(i)/2;
+    const blue = normColor(i) * Math.cos(i) * .15;
+    stroke(red, green, blue);
     drawCircle(node.position, 50 - normRadius(i));
   })
 }
